@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: Stars Cash Flow Reseller API
+  description: >
+    Telegram Stars CPA / SMM panel API (JustAnotherPanel-compatible). A single
+    endpoint dispatched on the `action` field. Import this spec into a ChatGPT
+    Custom GPT Action, or any OpenAPI tool, to drive the API. Everything except
+    `services` needs an API key. `add` spends the key's USD balance — confirm the
+    cost with the user before calling it.
+  version: 0.1.0
+servers:
+  - url: https://api-stars.ros.media
+paths:
+  /api/v2:
+    post:
+      operationId: callApi
+      summary: Reseller API dispatch endpoint
+      description: >
+        Dispatches on `action`. Supported: services, balance, add, status,
+        cancel. Send as application/x-www-form-urlencoded. Errors return
+        { "error": "..." } with HTTP 200, so always check for an `error` field.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action:
+                  type: string
+                  enum: [services, balance, add, status, cancel]
+                  description: Operation to perform.
+                key:
+                  type: string
+                  description: Reseller API key. Required for all actions except `services`.
+                service:
+                  type: integer
+                  description: Service ID (for `add`). See `services`.
+                link:
+                  type: string
+                  description: Target link — channel/post/bot (for `add`, most services).
+                quantity:
+                  type: integer
+                  description: Quantity of units (for `add`). Must be within the service min/max.
+                order:
+                  type: integer
+                  description: Single order ID (for `status`).
+                orders:
+                  type: string
+                  description: Comma-separated order IDs (for `status` of many, or `cancel`).
+      responses:
+        "200":
+          description: >
+            Result. Shape depends on `action`:
+            services → array of Service; balance → Balance; add → { order };
+            status → OrderStatus (single) or map of id→OrderStatus (many);
+            cancel → { canceled: [ids] }. Any action may instead return { error }.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items: { $ref: "#/components/schemas/Service" }
+                  - $ref: "#/components/schemas/Balance"
+                  - $ref: "#/components/schemas/AddResult"
+                  - $ref: "#/components/schemas/OrderStatus"
+                  - $ref: "#/components/schemas/CancelResult"
+                  - $ref: "#/components/schemas/ApiError"
+components:
+  schemas:
+    Service:
+      type: object
+      properties:
+        service: { type: integer }
+        name: { type: string }
+        type: { type: string }
+        category: { type: string }
+        rate: { type: string, description: USD per 1000 units }
+        min: { type: string }
+        max: { type: string }
+        refill: { type: boolean }
+        cancel: { type: boolean }
+        description: { type: string }
+        currency: { type: string }
+    Balance:
+      type: object
+      properties:
+        balance: { type: string }
+        currency: { type: string }
+    AddResult:
+      type: object
+      properties:
+        order: { type: integer }
+    OrderStatus:
+      type: object
+      properties:
+        charge: { type: string }
+        start_count: { type: string }
+        status:
+          type: string
+          enum: ["In progress", "Partial", "Completed", "Pending", "Canceled"]
+        remains: { type: string }
+        currency: { type: string }
+    CancelResult:
+      type: object
+      properties:
+        canceled:
+          type: array
+          items: { type: integer }
+    ApiError:
+      type: object
+      properties:
+        error: { type: string }
