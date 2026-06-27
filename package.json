@@ -1,0 +1,41 @@
+{
+  "name": "stars-cash-flow-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Stars Cash Flow reseller API (Telegram Stars CPA / SMM panel, JustAnotherPanel-compatible).",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "stars-cash-flow-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "telegram",
+    "stars",
+    "cpa",
+    "smm",
+    "justanotherpanel"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
