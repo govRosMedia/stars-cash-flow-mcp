@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Get an API key / reseller support
+    url: https://t.me/StarsCashFlowbot
+    about: Create a reseller key and ask product questions in the bot.
+  - name: Security disclosure
+    url: https://github.com/govRosMedia/stars-cash-flow-mcp/security/advisories/new
+    about: Report vulnerabilities privately (see SECURITY.md).

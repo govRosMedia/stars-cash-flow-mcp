@@ -119,7 +119,7 @@ export class StarsCashFlowClient {
   }
 
   /** USD balance of the configured key. */
-  getBalance(): Promise<Balance> {
+  async getBalance(): Promise<Balance> {
     return this.call<Balance>({ action: "balance", key: this.requireKey() });
   }
 
@@ -127,7 +127,7 @@ export class StarsCashFlowClient {
    * Place an order. SPENDS the key's USD balance.
    * `link` is required for most services (channel/post/bot link).
    */
-  addOrder(service: number, link: string, quantity: number): Promise<{ order: number }> {
+  async addOrder(service: number, link: string, quantity: number): Promise<{ order: number }> {
     return this.call<{ order: number }>({
       action: "add",
       key: this.requireKey(),
@@ -138,12 +138,12 @@ export class StarsCashFlowClient {
   }
 
   /** Status of one order. */
-  orderStatus(order: number): Promise<OrderStatus> {
+  async orderStatus(order: number): Promise<OrderStatus> {
     return this.call<OrderStatus>({ action: "status", key: this.requireKey(), order });
   }
 
   /** Status of several orders (up to 100). Returns a map keyed by order id. */
-  multiStatus(orders: number[]): Promise<Record<string, OrderStatus>> {
+  async multiStatus(orders: number[]): Promise<Record<string, OrderStatus>> {
     return this.call<Record<string, OrderStatus>>({
       action: "status",
       key: this.requireKey(),
@@ -152,7 +152,7 @@ export class StarsCashFlowClient {
   }
 
   /** Cancel orders and refund the unfulfilled remainder to the key balance. */
-  cancelOrders(orders: number[]): Promise<{ canceled: number[] }> {
+  async cancelOrders(orders: number[]): Promise<{ canceled: number[] }> {
     return this.call<{ canceled: number[] }>({
       action: "cancel",
       key: this.requireKey(),

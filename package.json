@@ -1,31 +1,56 @@
 {
   "name": "stars-cash-flow-mcp",
   "version": "0.1.0",
-  "description": "MCP server for the Stars Cash Flow reseller API (Telegram Stars CPA / SMM panel, JustAnotherPanel-compatible).",
+  "description": "MCP server, AI skill & Hermes tool for the Stars Cash Flow reseller API — Telegram Stars CPA / SMM panel (JustAnotherPanel-compatible).",
   "license": "MIT",
+  "author": "Stars Cash Flow",
+  "homepage": "https://github.com/govRosMedia/stars-cash-flow-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/govRosMedia/stars-cash-flow-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/govRosMedia/stars-cash-flow-mcp/issues"
+  },
   "type": "module",
   "bin": {
     "stars-cash-flow-mcp": "dist/index.js"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    }
+  },
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
     "start": "node dist/index.js",
-    "prepublishOnly": "npm run build"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
   },
   "keywords": [
     "mcp",
     "model-context-protocol",
+    "claude",
     "telegram",
+    "telegram-stars",
     "stars",
     "cpa",
     "smm",
-    "justanotherpanel"
+    "smm-panel",
+    "justanotherpanel",
+    "reseller",
+    "chatgpt",
+    "hermes"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -33,9 +58,13 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
