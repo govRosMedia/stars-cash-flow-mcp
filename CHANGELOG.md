@@ -6,6 +6,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Python CLI now raises a clear error (instead of an uncaught traceback) on a
+  non-JSON `200` response, matching the TypeScript client and the documented
+  behaviour.
+
+### Changed
+
+- `create_order` (MCP) and `order`/`price` (CLI) accept an optional `link`; the API
+  validates per-service `requires_link` and rejects when a required link is missing.
+- The confirm path reports `estimated_cost_usd` (quote-time figure) rather than
+  `spent_usd`; the authoritative charge is on the order via `status`.
+- Test files are excluded from the published `dist/` (separate `tsconfig.build.json`).
+
 ## [0.1.0] — 2026-06-28
 
 ### Added

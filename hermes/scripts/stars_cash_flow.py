@@ -24,6 +24,7 @@ import argparse
 import json
 import os
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -39,9 +40,13 @@ def _call(**data):
     )
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
-            payload = json.loads(resp.read().decode())
+            raw = resp.read().decode()
     except urllib.error.URLError as e:
         sys.exit(f"network error calling {API_BASE}: {e}")
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError:
+        sys.exit(f"non-JSON response from {API_BASE}: {raw[:200]}")
     if isinstance(payload, dict) and "error" in payload:
         sys.exit(f"API error: {payload['error']}")
     return payload
@@ -83,12 +88,12 @@ def main():
 
     pr = sub.add_parser("price", help="estimate the cost of an order (no spend)")
     pr.add_argument("--service", type=int, required=True)
-    pr.add_argument("--link", required=True)
+    pr.add_argument("--link", help="target link (required by the API for most services)")
     pr.add_argument("--quantity", type=int, required=True)
 
     od = sub.add_parser("order", help="place an order (SPENDS balance, needs --confirm)")
     od.add_argument("--service", type=int, required=True)
-    od.add_argument("--link", required=True)
+    od.add_argument("--link", help="target link (required by the API for most services)")
     od.add_argument("--quantity", type=int, required=True)
     od.add_argument("--confirm", action="store_true", help="actually place the order")
 
@@ -122,7 +127,9 @@ def main():
                     "cost_usd": f"{cost:.4f}"})
             return
         res = _call(action="add", key=_key(), service=a.service, link=a.link, quantity=a.quantity)
-        _print({"placed": True, "order": res.get("order"), "spent_usd": f"{cost:.4f}",
+        # estimated_cost_usd is the quote-time figure; the authoritative charge is on
+        # the order (see `status`).
+        _print({"placed": True, "order": res.get("order"), "estimated_cost_usd": f"{cost:.4f}",
                 "service_name": svc["name"]})
 
     elif a.cmd == "status":
