@@ -1,19 +1,33 @@
 # Stars Cash Flow — MCP server, AI skill & Hermes tool
 
-Drive the **Stars Cash Flow** reseller API from any AI agent. Stars Cash Flow is
-a CPA exchange for real Telegram actions — channel subscribers, boosts and bot
-starts fulfilled by verified real users (not bots). The API is
-[JustAnotherPanel](https://justanotherpanel.com/) / Perfect-Panel compatible.
+[![CI](https://github.com/govRosMedia/stars-cash-flow-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/govRosMedia/stars-cash-flow-mcp/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/stars-cash-flow-mcp.svg)](https://www.npmjs.com/package/stars-cash-flow-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![MCP](https://img.shields.io/badge/MCP-compatible-8A2BE2.svg)](https://modelcontextprotocol.io)
 
-This repo ships one API contract behind three surfaces:
+Drive the **Stars Cash Flow** reseller API from any AI agent. Stars Cash Flow is a
+CPA exchange for **real Telegram actions** — channel subscribers, boosts and bot
+starts fulfilled by verified real users, not bots. The API is
+[JustAnotherPanel](https://justanotherpanel.com/) / Perfect-Panel compatible, so
+it drops into any existing SMM-panel integration.
+
+One API contract, three first-class surfaces:
 
 | Surface | Path | For |
 | --- | --- | --- |
-| **MCP server** (TypeScript) | `src/` → `dist/` | Claude Desktop, Claude Code, any MCP host (Hermes is MCP-compatible too) |
-| **Universal skill** | `skill/SKILL.md` + `skill/openapi.yaml` | Claude Code skills, ChatGPT Custom GPT Actions (import the OpenAPI) |
-| **Hermes skill + CLI** | `hermes/SKILL.md` + `hermes/scripts/` | self-hosted [Hermes Agent](https://github.com/nousresearch/hermes-agent), or any shell |
+| **MCP server** (TypeScript) | [`src/`](./src) → `dist/` | Claude Desktop, Claude Code, any MCP host |
+| **Universal skill** | [`skill/SKILL.md`](./skill/SKILL.md) · [`openapi.yaml`](./skill/openapi.yaml) | Claude Code skills, ChatGPT Custom GPT Actions |
+| **Hermes skill + CLI** | [`hermes/`](./hermes) | [Hermes Agent](https://github.com/nousresearch/hermes-agent), or any shell |
 
-## API at a glance
+## Documentation
+
+- 📘 **[API reference](./docs/API.md)** — every action, field and guarantee
+- 🚀 **[Quickstart](./docs/QUICKSTART.md)** — set up each surface in minutes
+- ❓ **[FAQ](./docs/FAQ.md)** — common questions
+- ⚠️ **[Error reference](./docs/ERRORS.md)** — every error message and fix
+- 🧪 **[Examples](./examples)** — runnable curl / Python / Node
+
+## The API in 30 seconds
 
 `POST https://api-stars.ros.media/api/v2` — form-encoded, dispatched on `action`:
 
@@ -26,38 +40,45 @@ This repo ships one API contract behind three surfaces:
 | `cancel` | `key, orders` | `{ canceled: [ids] }` — refunds remainder |
 
 Get an API key from [`@StarsCashFlowbot`](https://t.me/StarsCashFlowbot) →
-*Reseller*. Everything except `services` needs the key; the key holds a USD
+**Reseller**. Everything except `services` needs the key; the key holds a USD
 balance. Rate limit: 60 req/min/key.
 
 ## 🔴 Money safety
 
-`add` debits real USD. Every surface here prices the order first and refuses to
-spend without explicit confirmation:
+`add` debits real USD. Every surface here **prices the order first and refuses to
+spend without explicit confirmation**:
 
-- **MCP** — `create_order` is two-step: the first call returns a cost estimate;
-  it only places the order when called again with `confirm: true`.
-- **CLI** — `order` / `cancel` print an estimate and do nothing unless `--confirm`
-  is passed.
-- **Skill** — instructs the agent to price, show the cost, and get a "yes" before
-  ordering.
+- **MCP** — `create_order` is two-step: the first call returns a cost estimate; it
+  only places the order when called again with `confirm: true`.
+- **CLI** — `order` / `cancel` print an estimate and do nothing unless `--confirm`.
+- **Skill** — instructs the agent to price, show the cost, and get a "yes" first.
 
 Never hardcode or print the key — read it from `STARS_CASH_FLOW_API_KEY`.
 
-## MCP server
+## Install — MCP server
+
+Once published:
 
 ```bash
-npm install
-npm run build
+npx -y stars-cash-flow-mcp
 ```
 
-Register in an MCP host (Claude Desktop / Claude Code `mcp.json`):
+Or from source:
+
+```bash
+git clone https://github.com/govRosMedia/stars-cash-flow-mcp.git
+cd stars-cash-flow-mcp
+npm install && npm run build
+```
+
+Register in an MCP host (`claude_desktop_config.json` / `.mcp.json`):
 
 ```json
 {
   "mcpServers": {
     "stars-cash-flow": {
-      "command": "node",
-      "args": ["/abs/path/to/stars-cash-flow-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "stars-cash-flow-mcp"],
       "env": {
         "STARS_CASH_FLOW_API_KEY": "your-key",
         "STARS_CASH_FLOW_API_BASE": "https://api-stars.ros.media/api/v2"
@@ -67,28 +88,32 @@ Register in an MCP host (Claude Desktop / Claude Code `mcp.json`):
 }
 ```
 
-Tools: `list_services`, `get_balance`, `create_order` (confirm-gated),
+**Tools:** `list_services`, `get_balance`, `create_order` (confirm-gated),
 `order_status`, `cancel_order`.
 
-## Universal skill (Claude Code / ChatGPT)
+See the [Quickstart](./docs/QUICKSTART.md) for ChatGPT and Hermes setup.
 
-- **Claude Code:** copy `skill/SKILL.md` into `.claude/skills/stars-cash-flow/`.
-- **ChatGPT Custom GPT:** create a GPT → *Actions* → import `skill/openapi.yaml`;
-  add the key as an auth header or instruct the user to supply it.
+## Use the typed client directly
 
-## Hermes Agent
+```ts
+import { StarsCashFlowClient } from "stars-cash-flow-mcp";
 
-Copy the skill into Hermes' skills tree and set the key when prompted:
-
-```bash
-mkdir -p ~/.hermes/skills/telegram/stars-cash-flow
-cp -r hermes/SKILL.md hermes/scripts ~/.hermes/skills/telegram/stars-cash-flow/
-export STARS_CASH_FLOW_API_KEY=your-key
+const client = new StarsCashFlowClient(); // reads STARS_CASH_FLOW_API_KEY
+const services = await client.listServices();
+const cost = StarsCashFlowClient.cost(services[0], 1000); // USD
 ```
 
-Then `/stars-cash-flow price 1000 subscribers for @mychannel`. Hermes is also
-MCP-compatible, so the MCP server above works there too.
+## Development
+
+```bash
+npm install
+npm run build      # tsc → dist/
+npm test           # vitest
+npm run typecheck  # tsc --noEmit
+```
+
+CI runs build + tests on Node 18/20/22. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+[MIT](./LICENSE) © Stars Cash Flow

@@ -1,0 +1,38 @@
+name: Bug report
+description: Something isn't working as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do **not** include your API key or any secret. For security issues see SECURITY.md."
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Which surface?
+      options: [MCP server, TypeScript client, Universal skill (ChatGPT), Hermes skill / CLI, Docs]
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Commands or tool calls (with secrets redacted).
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+      placeholder: "0.1.0 or commit sha"
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "Node version, OS, MCP host (Claude Desktop/Code), etc."
