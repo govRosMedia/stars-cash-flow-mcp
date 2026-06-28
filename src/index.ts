@@ -65,7 +65,10 @@ server.registerTool(
       "Place a Stars Cash Flow order. THIS SPENDS the key's USD balance. Two-step by design: call without `confirm` (or confirm=false) to get a cost estimate and validation; call again with confirm=true to actually place the order. `link` is the target channel/post/bot link (required for most services).",
     inputSchema: {
       service: z.number().int().describe("Service ID from list_services"),
-      link: z.string().describe("Target link (channel/post/bot). Required for most services."),
+      link: z
+        .string()
+        .optional()
+        .describe("Target link (channel/post/bot). Required for most services; the API rejects the order if a required link is missing."),
       quantity: z.number().int().positive().describe("Quantity of units to order"),
       confirm: z
         .boolean()
@@ -108,8 +111,10 @@ server.registerTool(
         });
       }
 
-      const result = await client.addOrder(service, link, quantity);
-      return ok({ placed: true, order: result.order, spent_usd: cost.toFixed(4), service_name: svc.name });
+      const result = await client.addOrder(service, link ?? "", quantity);
+      // `estimated_cost_usd` is from the catalog rate at quote time; the authoritative
+      // charge is on the order itself — read it back with order_status.
+      return ok({ placed: true, order: result.order, estimated_cost_usd: cost.toFixed(4), service_name: svc.name });
     } catch (e: any) {
       return fail(e instanceof StarsCashFlowError ? e.message : `Unexpected error: ${e?.message || e}`);
     }

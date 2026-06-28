@@ -52,6 +52,11 @@ action=services
 | `description` | string | Details / requirements (e.g. bot must be channel admin). |
 | `currency` | string | Always `USD`. |
 
+Some services also expose `mode` (`task_exchange` or `manual`), `requires_link`
+(whether `add` needs a `link`) and `enabled`. Clients may ignore these — the API
+validates them server-side and returns a clear error if, e.g., a required link is
+missing — but they're useful for building richer UIs.
+
 ```json
 [
   {
