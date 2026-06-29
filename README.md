@@ -4,7 +4,6 @@
 [![npm](https://img.shields.io/npm/v/stars-cash-flow-mcp.svg)](https://www.npmjs.com/package/stars-cash-flow-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-compatible-8A2BE2.svg)](https://modelcontextprotocol.io)
-[![smithery](https://smithery.ai/badge/stars-cash-flow-mcp)](https://smithery.ai/server/stars-cash-flow-mcp)
 
 Drive the **Stars Cash Flow** reseller API from any AI agent. Stars Cash Flow is a
 CPA exchange for **real Telegram actions** — channel subscribers, boosts and bot
@@ -57,18 +56,6 @@ spend without explicit confirmation**:
 Never hardcode or print the key — read it from `STARS_CASH_FLOW_API_KEY`.
 
 ## Install — MCP server
-
-### Via Smithery (one-click registry)
-
-Once listed, install into any MCP client straight from the
-[Smithery registry](https://smithery.ai/server/stars-cash-flow-mcp) — it collects
-your reseller API key in the UI and wires it in. Or via the CLI:
-
-```bash
-npx -y @smithery/cli install stars-cash-flow-mcp --client claude
-```
-
-### Via npm / npx
 
 Once published:
 
