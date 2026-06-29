@@ -6,6 +6,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `smithery.yaml` so the server can be listed and launched from the
+  [Smithery](https://smithery.ai) MCP registry, with the reseller API key
+  collected via `configSchema` and mapped to the server's environment.
+
 ### Fixed
 
 - Python CLI now raises a clear error (instead of an uncaught traceback) on a

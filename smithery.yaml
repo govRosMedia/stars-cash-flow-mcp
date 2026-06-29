@@ -1,0 +1,30 @@
+# Smithery configuration — https://smithery.ai/docs
+# Lets Smithery list and launch this stdio MCP server, collecting the reseller
+# API key from the user via configSchema and passing it to the server as env.
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required: ["apiKey"]
+    properties:
+      apiKey:
+        type: string
+        title: "Reseller API key"
+        description: "Stars Cash Flow reseller API key (from @StarsCashFlowbot → Reseller). Tied to a USD balance; create_order spends it."
+      apiBase:
+        type: string
+        title: "API endpoint"
+        description: "Override the API base URL."
+        default: "https://api-stars.ros.media/api/v2"
+  commandFunction: |
+    (config) => ({
+      command: "node",
+      args: ["dist/index.js"],
+      env: {
+        STARS_CASH_FLOW_API_KEY: config.apiKey,
+        STARS_CASH_FLOW_API_BASE: config.apiBase || "https://api-stars.ros.media/api/v2"
+      }
+    })
+  exampleConfig:
+    apiKey: "your-reseller-api-key"
+    apiBase: "https://api-stars.ros.media/api/v2"
