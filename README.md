@@ -1,7 +1,7 @@
 # Stars Cash Flow — MCP server, AI skill & Hermes tool
 
 [![CI](https://github.com/govRosMedia/stars-cash-flow-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/govRosMedia/stars-cash-flow-mcp/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/stars-cash-flow-mcp.svg)](https://www.npmjs.com/package/stars-cash-flow-mcp)
+[![npm](https://img.shields.io/npm/v/@rosmedia/stars-cash-flow-mcp.svg)](https://www.npmjs.com/package/@rosmedia/stars-cash-flow-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-compatible-8A2BE2.svg)](https://modelcontextprotocol.io)
 
@@ -60,7 +60,7 @@ Never hardcode or print the key — read it from `STARS_CASH_FLOW_API_KEY`.
 Once published:
 
 ```bash
-npx -y stars-cash-flow-mcp
+npx -y @rosmedia/stars-cash-flow-mcp
 ```
 
 Or from source:
@@ -78,7 +78,7 @@ Register in an MCP host (`claude_desktop_config.json` / `.mcp.json`):
   "mcpServers": {
     "stars-cash-flow": {
       "command": "npx",
-      "args": ["-y", "stars-cash-flow-mcp"],
+      "args": ["-y", "@rosmedia/stars-cash-flow-mcp"],
       "env": {
         "STARS_CASH_FLOW_API_KEY": "your-key",
         "STARS_CASH_FLOW_API_BASE": "https://api-stars.ros.media/api/v2"
@@ -96,7 +96,7 @@ See the [Quickstart](./docs/QUICKSTART.md) for ChatGPT and Hermes setup.
 ## Use the typed client directly
 
 ```ts
-import { StarsCashFlowClient } from "stars-cash-flow-mcp";
+import { StarsCashFlowClient } from "@rosmedia/stars-cash-flow-mcp";
 
 const client = new StarsCashFlowClient(); // reads STARS_CASH_FLOW_API_KEY
 const services = await client.listServices();

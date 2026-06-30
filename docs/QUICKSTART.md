@@ -30,7 +30,7 @@ npm install && npm run build
 Or, once published, run it without cloning:
 
 ```bash
-npx -y stars-cash-flow-mcp
+npx -y @rosmedia/stars-cash-flow-mcp
 ```
 
 Add it to your MCP host config (`claude_desktop_config.json`, or
@@ -41,7 +41,7 @@ Add it to your MCP host config (`claude_desktop_config.json`, or
   "mcpServers": {
     "stars-cash-flow": {
       "command": "npx",
-      "args": ["-y", "stars-cash-flow-mcp"],
+      "args": ["-y", "@rosmedia/stars-cash-flow-mcp"],
       "env": {
         "STARS_CASH_FLOW_API_KEY": "your-key",
         "STARS_CASH_FLOW_API_BASE": "https://api-stars.ros.media/api/v2"
@@ -117,7 +117,7 @@ curl -s -X POST https://api-stars.ros.media/api/v2 \
 You can also import the typed client directly:
 
 ```ts
-import { StarsCashFlowClient } from "stars-cash-flow-mcp";
+import { StarsCashFlowClient } from "@rosmedia/stars-cash-flow-mcp";
 
 const client = new StarsCashFlowClient(); // reads env STARS_CASH_FLOW_API_KEY
 const services = await client.listServices();
