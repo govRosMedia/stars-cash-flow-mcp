@@ -1,5 +1,5 @@
 {
-  "name": "stars-cash-flow-mcp",
+  "name": "@rosmedia/stars-cash-flow-mcp",
   "version": "0.1.0",
   "description": "MCP server, AI skill & Hermes tool for the Stars Cash Flow reseller API — Telegram Stars CPA / SMM panel (JustAnotherPanel-compatible).",
   "license": "MIT",
