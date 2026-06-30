@@ -24,6 +24,10 @@
   },
   "files": [
     "dist",
+    "skill",
+    "hermes",
+    "docs",
+    "examples",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"

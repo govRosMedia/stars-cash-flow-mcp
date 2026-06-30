@@ -83,6 +83,9 @@ components:
         cancel: { type: boolean }
         description: { type: string }
         currency: { type: string }
+        mode: { type: string, enum: [task_exchange, manual], description: "Fulfillment mode (present on some services)." }
+        requires_link: { type: boolean, description: "Whether `add` requires a link (present on some services)." }
+        enabled: { type: boolean, description: "Whether the service is currently enabled." }
     Balance:
       type: object
       properties:

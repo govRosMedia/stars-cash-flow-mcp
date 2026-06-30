@@ -6,11 +6,28 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Security
+
+- **`cancel_order` (MCP) is now confirm-gated.** Previously it refunded the
+  unfulfilled remainder on the first call; it now returns a preview and only
+  cancels when called again with `confirm: true`, symmetric with `create_order`.
+  (Found by independent cross-review.)
+
 ### Added
 
 - `smithery.yaml` so the server can be listed and launched from the
   [Smithery](https://smithery.ai) MCP registry, with the reseller API key
   collected via `configSchema` and mapped to the server's environment.
+- Optional `mode` / `requires_link` / `enabled` fields on the `Service` type and
+  OpenAPI schema, matching the live catalog.
+
+### Changed
+
+- Published under the `@rosmedia` npm organization (`@rosmedia/stars-cash-flow-mcp`).
+- The npm package now ships `skill/`, `hermes/`, `docs/` and `examples/` so README
+  links resolve and skill/CLI users get the files on install.
+- CLI `status`/`cancel` reject invalid `--orders` tokens instead of silently
+  dropping them (`123,abc` now errors rather than becoming `123`).
 
 ### Fixed
 

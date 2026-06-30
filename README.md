@@ -48,8 +48,9 @@ balance. Rate limit: 60 req/min/key.
 `add` debits real USD. Every surface here **prices the order first and refuses to
 spend without explicit confirmation**:
 
-- **MCP** — `create_order` is two-step: the first call returns a cost estimate; it
-  only places the order when called again with `confirm: true`.
+- **MCP** — `create_order` and `cancel_order` are two-step: the first call returns
+  a preview (cost estimate / what would be cancelled); they only act when called
+  again with `confirm: true`.
 - **CLI** — `order` / `cancel` print an estimate and do nothing unless `--confirm`.
 - **Skill** — instructs the agent to price, show the cost, and get a "yes" first.
 
