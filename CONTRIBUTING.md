@@ -48,6 +48,26 @@ update **every** surface and the docs so they stay in sync.
 - Open a PR against `main`. CI (build + test) must pass.
 - Describe what changed, why, and how you verified it.
 
+## Releasing (maintainers)
+
+Releases are published to npm **from GitHub Actions with provenance** (the verified
+"Published from this repo" badge), not from a laptop.
+
+One-time setup: add a repo secret `NPM_TOKEN` — an npm *granular access token*
+(automation type) with publish rights on `@rosmedia/stars-cash-flow-mcp`.
+
+To cut a release:
+
+```bash
+# update CHANGELOG.md [Unreleased] → a new version section
+npm version patch     # or minor / major — bumps package.json and creates a git tag
+git push --follow-tags
+```
+
+Pushing the `v*` tag triggers `.github/workflows/publish.yml`, which builds, tests,
+and runs `npm publish --provenance --access public`. The published version then
+shows a provenance attestation linking it to the exact commit and workflow run.
+
 ## Reporting bugs / requesting features
 
 Use the GitHub issue templates. For **security** issues, follow
