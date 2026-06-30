@@ -1,4 +1,11 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/govRosMedia/stars-cash-flow-mcp/main/assets/banner.png" alt="Stars Cash Flow — Telegram Stars CPA · MCP for AI agents" width="100%">
+</p>
+
 # Stars Cash Flow — MCP server, AI skill & Hermes tool
+
+> **Buy and manage real Telegram Stars CPA / SMM orders — channel subscribers,
+> boosts and bot starts — straight from Claude, ChatGPT, or any AI agent.**
 
 [![CI](https://github.com/govRosMedia/stars-cash-flow-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/govRosMedia/stars-cash-flow-mcp/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/@rosmedia/stars-cash-flow-mcp.svg)](https://www.npmjs.com/package/@rosmedia/stars-cash-flow-mcp)
@@ -18,6 +25,18 @@ One API contract, three first-class surfaces:
 | **MCP server** (TypeScript) | [`src/`](./src) → `dist/` | Claude Desktop, Claude Code, any MCP host |
 | **Universal skill** | [`skill/SKILL.md`](./skill/SKILL.md) · [`openapi.yaml`](./skill/openapi.yaml) | Claude Code skills, ChatGPT Custom GPT Actions |
 | **Hermes skill + CLI** | [`hermes/`](./hermes) | [Hermes Agent](https://github.com/nousresearch/hermes-agent), or any shell |
+
+## Highlights
+
+- 🤝 **Drop-in compatible** — JustAnotherPanel / Perfect-Panel API; swap URL + key.
+- 🔒 **Money-safe by design** — ordering and cancelling are two-step; nothing spends
+  or refunds without explicit confirmation.
+- 🧩 **Works everywhere** — MCP for Claude, an OpenAPI action for ChatGPT, a skill +
+  zero-dependency CLI for Hermes and any shell.
+- 📘 **Fully documented** — API reference, quickstart, FAQ, error reference, runnable
+  examples.
+- ✅ **Tested & typed** — TypeScript client, vitest suite, CI on Node 18/20/22,
+  published with provenance.
 
 ## Documentation
 
