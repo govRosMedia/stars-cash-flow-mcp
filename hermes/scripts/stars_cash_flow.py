@@ -75,6 +75,16 @@ def _estimate(service_id, link, quantity):
     return svc, cost
 
 
+def _parse_ids(raw):
+    """Validate a comma-separated id list — reject any non-integer instead of
+    silently dropping it (a typo like 123,abc must not become just 123)."""
+    toks = [x.strip() for x in str(raw).split(",") if x.strip()]
+    bad = [t for t in toks if not t.isdigit()]
+    if not toks or bad:
+        sys.exit(f"invalid order ids {raw!r} — expected comma-separated integers")
+    return ",".join(toks)
+
+
 def _print(obj):
     print(json.dumps(obj, ensure_ascii=False, indent=2))
 
@@ -134,7 +144,7 @@ def main():
 
     elif a.cmd == "status":
         if a.orders:
-            ids = ",".join(x.strip() for x in a.orders.split(",") if x.strip().isdigit())
+            ids = _parse_ids(a.orders)
             _print(_call(action="status", key=_key(), orders=ids))
         elif a.order is not None:
             _print(_call(action="status", key=_key(), order=a.order))
@@ -142,11 +152,12 @@ def main():
             sys.exit("provide --order or --orders")
 
     elif a.cmd == "cancel":
+        ids = _parse_ids(a.orders)
         if not a.confirm:
             _print({"requires_confirmation": True,
-                    "message": f"Would cancel orders {a.orders} and refund the remainder. Re-run with --confirm."})
+                    "message": f"Would cancel orders {ids} and refund the remainder. Re-run with --confirm."})
             return
-        _print(_call(action="cancel", key=_key(), orders=a.orders))
+        _print(_call(action="cancel", key=_key(), orders=ids))
 
 
 if __name__ == "__main__":

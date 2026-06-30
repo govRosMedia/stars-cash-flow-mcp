@@ -61,10 +61,10 @@ Errors come back as `{ "error": "message" }` with HTTP 200 — always check for 
 4. `cancel` refunds only the *unfulfilled* remainder; already-delivered units are
    not refunded. Confirm before cancelling.
 
-If you are an MCP host using the `stars-cash-flow` MCP server, `create_order` is
-already two-step: the first call returns an estimate, and you must repeat it with
-`confirm: true`. Surface the estimate to the user and get approval before
-confirming.
+If you are an MCP host using the `stars-cash-flow` MCP server, `create_order` and
+`cancel_order` are already two-step: the first call returns a preview (cost
+estimate / what would be cancelled), and you must repeat it with `confirm: true`.
+Surface the preview to the user and get approval before confirming.
 
 ## Typical flow
 

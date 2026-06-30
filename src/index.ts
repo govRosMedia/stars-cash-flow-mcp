@@ -144,12 +144,32 @@ server.registerTool(
   {
     title: "Cancel order (refunds remainder)",
     description:
-      "Cancel one or more orders. The unfulfilled remainder is refunded to the key's USD balance. Pass `orders` as a list of order IDs.",
+      "Cancel one or more orders. The unfulfilled remainder is refunded to the key's USD balance — this changes money state. Two-step by design: call without `confirm` to see what would be cancelled; call again with confirm=true to actually cancel.",
     inputSchema: {
       orders: z.array(z.number().int()).min(1).describe("Order IDs to cancel"),
+      confirm: z
+        .boolean()
+        .optional()
+        .describe("Must be true to actually cancel and refund. Omit/false = preview only."),
     },
   },
-  ({ orders }) => wrap(() => client.cancelOrders(orders))
+  async ({ orders, confirm }) => {
+    if (!confirm) {
+      let current_status: Record<string, unknown> | undefined;
+      try {
+        current_status = await client.multiStatus(orders.slice(0, 100));
+      } catch {
+        /* preview status is best-effort */
+      }
+      return ok({
+        requires_confirmation: true,
+        message: `This will cancel ${orders.length} order(s) and refund the unfulfilled remainder to your balance. Review, then call cancel_order again with confirm=true to proceed.`,
+        orders,
+        ...(current_status ? { current_status } : {}),
+      });
+    }
+    return wrap(() => client.cancelOrders(orders));
+  }
 );
 
 async function main() {

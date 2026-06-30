@@ -19,6 +19,12 @@ export interface Service {
   cancel: boolean;
   description: string;
   currency: string; // "USD"
+  /** Fulfillment mode; present on some services. */
+  mode?: "task_exchange" | "manual";
+  /** Whether `add` requires a `link`; present on some services. */
+  requires_link?: boolean;
+  /** Whether the service is currently enabled. */
+  enabled?: boolean;
 }
 
 export interface Balance {
