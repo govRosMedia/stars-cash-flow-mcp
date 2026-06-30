@@ -20,6 +20,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   collected via `configSchema` and mapped to the server's environment.
 - Optional `mode` / `requires_link` / `enabled` fields on the `Service` type and
   OpenAPI schema, matching the live catalog.
+- GitHub Actions release workflow (`.github/workflows/publish.yml`) that publishes
+  to npm **with provenance** on `v*` tags — links each release to the exact source
+  commit and build.
 
 ### Changed
 
